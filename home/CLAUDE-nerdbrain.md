@@ -26,7 +26,8 @@ an entity page when a write trigger fires (see below).
 
 ## Linear integration
 
-For any Linear read/write, invoke the `linear-cli` skill — it has the command
+For any Linear read/write, invoke the `linear-cli` skill (from the
+`pawelwlazlo/linear-skills` plugin marketplace) — it has the full command
 reference. Do NOT use a Linear MCP (the local MCP was removed; it bloated
 context).
 
@@ -34,6 +35,45 @@ When the entity page frontmatter contains `linear.team` or `linear.project`,
 prefer querying Linear for active work over re-asking the user. When recording
 decisions, link to Linear issue IDs (e.g. "2026-05-05 — chose JWT over
 sessions (LIN-123)").
+
+### Issue workflow
+
+When given a Linear issue ID:
+
+1. Fetch the issue and read its full content.
+2. **No implementation comment** → enter planning mode: draft a plan, run a QA
+   session with the user to clarify details.
+3. **Implementation comment exists** → review the plan; run QA only if
+   ambiguities remain.
+
+A plan must contain: **Objective**, **Scope**, **Technical Approach**,
+**Implementation Steps**, **Acceptance Criteria**, **Risks**, **Dependencies**.
+
+Post the finalized plan as a Linear comment before starting implementation.
+After each working session, post a short summary comment (decisions, progress,
+open questions) to preserve context for future sessions.
+
+### Completion summary (mandatory)
+
+After every working session — including continuations and partial sessions —
+post a comment to the Linear issue. Must include:
+- what was changed,
+- scope completed,
+- current status,
+- validation / test results,
+- what remains next.
+
+Must not be skipped. The comment must be self-contained enough to resume
+from Linear history alone without losing execution context.
+
+### Branch policy
+
+1. **On main/master**: before committing any changes, create an issue branch
+   by fetching the branch name from Linear.
+2. **On a different issue branch**: ask the user to choose:
+   a. Create target branch from the current branch?
+   b. Create target branch from main/master?
+   c. Leave branch as-is?
 
 ## Obsidian integration
 
